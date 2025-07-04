@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-mkdir -p /app/.artifact_scan
+mkdir -p .artifact_scan
 echo "::group::🔍 Starting Docker Image Hardener..."
 
 ARGS=()
