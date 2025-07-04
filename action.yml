@@ -32,6 +32,22 @@ inputs:
     description: "Save Trivy scan result to JSON"
     required: false
     default: "false"
+  sbom:
+    description: "Generate SBOM report"
+    required: false
+    default: "false"
+  sarif:
+    description: "Generate SARIF report"
+    required: false
+    default: "false"
+  scorecard:
+    description: "Generate scorecard grading"
+    required: false
+    default: "false"
+  output-dir:
+    description: "Directory to save scan results"
+    required: false
+    default: ""
 
 runs:
   using: "composite"
@@ -52,13 +68,7 @@ runs:
         curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
       shell: bash
 
-    - name: 🚀 Run Hardener CLI
+    - name: 🚀 Run Docker Hardener
       run: |
-        python ${{ github.action_path }}/cli/main.py ${{ inputs.dockerfile }} \
-          --scan="${{ inputs.scan }}" \
-          --rewrite="${{ inputs.rewrite }}" \
-          --scan-image="${{ inputs.image }}" \
-          --fail-on-critical="${{ inputs.fail-on-critical }}" \
-          --severity="${{ inputs.severity }}" \
-          --summary="${{ inputs.summary }}"
+        bash ${{ github.action_path }}/entrypoint.sh
       shell: bash
