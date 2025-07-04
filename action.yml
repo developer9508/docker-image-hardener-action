@@ -28,35 +28,33 @@ inputs:
     description: "Generate GitHub summary markdown table"
     required: false
     default: "false"
-  sbom:
-    description: "Generate Software Bill of Materials (SBOM)"
-    required: false
-    default: "false"
-  sarif:
-    description: "Generate SARIF report (for GitHub Security tab)"
-    required: false
-    default: "false"
-  scorecard:
-    description: "Generate security scorecard A/B/C grade"
-    required: false
-    default: "false"
-  output-dir:
-    description: "Custom output directory for scan artifacts"
-    required: false
-    default: "/app/.artifact_scan"
 
 runs:
-  using: "docker"
-  image: "Dockerfile"
-  args:
-    - "${{ inputs.dockerfile }}"
-    - "${{ inputs.image }}"
-    - "${{ inputs.scan }}"
-    - "${{ inputs.rewrite }}"
-    - "${{ inputs.fail-on-critical }}"
-    - "${{ inputs.severity }}"
-    - "${{ inputs.summary }}"
-    - "${{ inputs.sbom }}"
-    - "${{ inputs.sarif }}"
-    - "${{ inputs.scorecard }}"
-    - "${{ inputs.output-dir }}"
+  using: "composite"
+  steps:
+    - name: 🐍 Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+
+    - name: 📦 Install Python dependencies
+      run: pip install -r ${{ github.action_path }}/cli/requirements.txt
+      shell: bash
+
+    - name: 🧰 Install Trivy
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y curl unzip gnupg
+        curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+      shell: bash
+
+    - name: 🚀 Run Hardener CLI
+      run: |
+        python ${{ github.action_path }}/cli/main.py ${{ inputs.dockerfile }} \
+          --scan="${{ inputs.scan }}" \
+          --rewrite="${{ inputs.rewrite }}" \
+          --scan-image="${{ inputs.image }}" \
+          --fail-on-critical="${{ inputs.fail-on-critical }}" \
+          --severity="${{ inputs.severity }}" \
+          --summary="${{ inputs.summary }}"
+      shell: bash
