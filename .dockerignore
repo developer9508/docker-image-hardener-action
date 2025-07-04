@@ -1,0 +1,40 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtualenvs
+venv/
+env/
+
+# Git metadata
+.git/
+.gitignore
+
+# macOS / Windows
+.DS_Store
+Thumbs.db
+
+# Logs and temp
+*.log
+*.tmp
+
+# Config / secrets
+.env
+*.env
+config.*
+secrets.*
+
+# IDEs/editors
+.vscode/
+.idea/
+
+# Documentation or extras
+*.md
+tests/
+examples/
+
+# Node/npm junk (if accidentally committed)
+node_modules/
+package-lock.json
