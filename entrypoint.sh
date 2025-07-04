@@ -1,49 +1,49 @@
 #!/bin/bash
 set -e
 
-DOCKERFILES=$1
-IMAGES=$2
-SCAN=$3
-REWRITE=$4
-FAIL_ON_CRITICAL=$5
-SEVERITY=$6
-SUMMARY=$7
-
 mkdir -p /app/.artifact_scan
 echo "::group::🔍 Starting Docker Image Hardener..."
 
-if [[ "$DOCKERFILES" != "" ]]; then
+ARGS=()
+
+[[ -n "$INPUT_DOCKERFILE" ]] && DOCKERFILES="$INPUT_DOCKERFILE"
+[[ -n "$INPUT_IMAGE" ]] && IMAGES="$INPUT_IMAGE"
+
+[[ "$INPUT_SCAN" == "true" ]] && ARGS+=(--scan)
+[[ "$INPUT_REWRITE" == "true" ]] && ARGS+=(--rewrite)
+[[ "$INPUT_FAIL_ON_CRITICAL" == "true" ]] && ARGS+=(--fail-on-critical)
+[[ "$INPUT_SUMMARY" == "true" ]] && ARGS+=(--summary)
+[[ "$INPUT_SAVE_JSON" == "true" ]] && ARGS+=(--save-json)
+[[ "$INPUT_SBOM" == "true" ]] && ARGS+=(--sbom)
+[[ "$INPUT_SARIF" == "true" ]] && ARGS+=(--sarif)
+[[ "$INPUT_SCORECARD" == "true" ]] && ARGS+=(--scorecard)
+[[ -n "$INPUT_SEVERITY" ]] && ARGS+=(--severity "$INPUT_SEVERITY")
+[[ -n "$INPUT_OUTPUT_DIR" ]] && ARGS+=(--output-dir "$INPUT_OUTPUT_DIR")
+
+# Dockerfile loop
+if [[ -n "$DOCKERFILES" ]]; then
   IFS=',' read -ra FILES <<< "$DOCKERFILES"
   for FILE in "${FILES[@]}"; do
     echo "::group::🔎 Analyzing Dockerfile: $FILE"
-    ARGS="$FILE"
-    [[ "$SCAN" == "true" ]] && ARGS="$ARGS --scan"
-    [[ "$REWRITE" == "true" ]] && ARGS="$ARGS --rewrite"
-    [[ "$FAIL_ON_CRITICAL" == "true" ]] && ARGS="$ARGS --fail-on-critical"
-    [[ "$SEVERITY" != "" ]] && ARGS="$ARGS --severity $SEVERITY"
-    [[ "$SUMMARY" == "true" ]] && ARGS="$ARGS --summary"
-    python3 /app/cli/main.py $ARGS
+    python3 /app/cli/main.py "$FILE" "${ARGS[@]}"
     echo "::endgroup::"
   done
 fi
 
-if [[ "$IMAGES" != "" ]]; then
+# Image scan loop
+if [[ -n "$IMAGES" ]]; then
   IFS=',' read -ra IMAGE_LIST <<< "$IMAGES"
   for IMG in "${IMAGE_LIST[@]}"; do
     echo "::group::🛡️ Scanning image: $IMG"
-    ARGS="--scan-image $IMG"
-    [[ "$FAIL_ON_CRITICAL" == "true" ]] && ARGS="$ARGS --fail-on-critical"
-    [[ "$SEVERITY" != "" ]] && ARGS="$ARGS --severity $SEVERITY"
-    [[ "$SUMMARY" == "true" ]] && ARGS="$ARGS --summary"
-    python3 /app/cli/main.py $ARGS
+    python3 /app/cli/main.py --scan-image "$IMG" "${ARGS[@]}"
     echo "::endgroup::"
   done
 fi
 
 echo "::endgroup::"
 
-# 🚀 Post PR Comment if summary and running in a PR
-if [[ "$SUMMARY" == "true" && "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
+# PR comment (optional)
+if [[ "$INPUT_SUMMARY" == "true" && "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
   echo "::group::📣 Posting PR comment..."
   python3 /app/cli/post_pr_comment.py
   echo "::endgroup::"
