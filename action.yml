@@ -28,6 +28,10 @@ inputs:
     description: "Generate GitHub summary markdown table"
     required: false
     default: "false"
+  save-json:
+    description: "Save Trivy scan result to JSON"
+    required: false
+    default: "false"
 
 runs:
   using: "composite"
