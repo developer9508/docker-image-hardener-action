@@ -1,0 +1,1 @@
+# docker-image-hardener-action
