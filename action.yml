@@ -95,5 +95,5 @@ runs:
       with:
         name: scan-artifacts
         path: |
-          .artifact_scan/
+          .artifact_scan/*
         include_hidden_files: true
