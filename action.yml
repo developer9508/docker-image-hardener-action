@@ -94,4 +94,4 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: scan-artifacts
-        path: .artifact_scan/
+        path: artifact_scan/
