@@ -13,7 +13,7 @@ def run_trivy_scan(
     sbom=False,
     sarif=False,
     scorecard=False,
-    output_dir=".artifact_scan"
+    output_dir="artifact_scan"
 ):
     dockerfile_path = Path(dockerfile_path).resolve()
     image_tag = f"harden-test-image-{dockerfile_path.stem}:latest"
