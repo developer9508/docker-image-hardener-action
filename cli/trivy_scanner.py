@@ -52,10 +52,10 @@ def run_image_scan(
     sbom=False,
     sarif=False,
     scorecard=False,
-    output_dir="/app/.artifact_scan"
+    output_dir="."
 ):
     print(f"🛡️ Scanning image: {image_name}")
-    output_path = Path(output_dir)
+    output_path = Path(output_dir).resolve()
     os.makedirs(output_path, exist_ok=True)
 
     json_filename = f"{image_name.replace(':', '_')}_trivy_scan_result.json"
