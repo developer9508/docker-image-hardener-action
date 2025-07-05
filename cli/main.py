@@ -8,7 +8,7 @@ from dockerfile_rewriter import rewrite_dockerfile
 
 def resolve_output_dir(user_output_dir=None):
     base_dir = user_output_dir or os.environ.get("GITHUB_WORKSPACE") or os.getcwd()
-    return os.path.join(base_dir, ".artifact_scan")
+    return os.path.join(base_dir, "artifact_scan")
 
 def main():
     parser = argparse.ArgumentParser(description="Docker Image Hardening Toolkit")
