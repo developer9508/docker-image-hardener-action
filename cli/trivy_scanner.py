@@ -70,6 +70,20 @@ def run_image_scan(
             f.write(output)
         print(f"📄 Trivy JSON saved to: {json_path}")
 
+        # Also log to console for CI visibility
+        print("🔍 Trivy Results (condensed):")
+        try:
+          data = json.loads(output)
+          for result in data.get("Results", []):
+              target = result.get("Target", "")
+              vulns = result.get("Vulnerabilities", [])
+              if vulns:
+                  print(f"📦 {target}: {len(vulns)} vulnerabilities")
+                  for v in vulns[:5]:  # Show only top 5 for brevity
+                      print(f"  ❗ {v['VulnerabilityID']} - {v['Severity']} - {v['PkgName']}")
+        except Exception as e:
+          print(f"⚠️ Could not parse or display Trivy JSON: {e}")
+
     if sbom:
         sbom_filename = f"{image_name.replace(':', '_')}.sbom.json"
         sbom_path = output_path / sbom_filename
