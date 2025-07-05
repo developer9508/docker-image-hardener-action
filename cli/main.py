@@ -1,7 +1,14 @@
 import argparse
+import os
+import sys
+from pathlib import Path
 from dockerfile_parser import parse_dockerfile
 from trivy_scanner import run_trivy_scan, run_image_scan
 from dockerfile_rewriter import rewrite_dockerfile
+
+def resolve_output_dir(user_output_dir=None):
+    base_dir = user_output_dir or os.environ.get("GITHUB_WORKSPACE") or os.getcwd()
+    return os.path.join(base_dir, ".artifact_scan")
 
 def main():
     parser = argparse.ArgumentParser(description="Docker Image Hardening Toolkit")
@@ -16,9 +23,10 @@ def main():
     parser.add_argument("--sbom", action="store_true", help="Generate SBOM (Software Bill of Materials)")
     parser.add_argument("--sarif", action="store_true", help="Generate SARIF report")
     parser.add_argument("--scorecard", action="store_true", help="Generate security scorecard")
-    parser.add_argument("--output-dir", default="/app/.artifact_scan", help="Directory to save outputs (JSON, SBOM, SARIF)")
+    parser.add_argument("--output-dir", help="Base directory for outputs (default: auto-detect)")
 
     args = parser.parse_args()
+    output_dir = resolve_output_dir(args.output_dir)
 
     if args.scan_image:
         run_image_scan(
@@ -30,13 +38,13 @@ def main():
             sbom=args.sbom,
             sarif=args.sarif,
             scorecard=args.scorecard,
-            output_dir=args.output_dir
+            output_dir=output_dir
         )
         return
 
     if not args.dockerfile:
         print("❌ Dockerfile path is required unless --scan-image is used.")
-        return
+        sys.exit(1)
 
     print(f"🔍 Analyzing {args.dockerfile}...")
     issues = parse_dockerfile(args.dockerfile)
@@ -57,7 +65,7 @@ def main():
             sbom=args.sbom,
             sarif=args.sarif,
             scorecard=args.scorecard,
-            output_dir=args.output_dir
+            output_dir=output_dir
         )
 
 if __name__ == "__main__":
