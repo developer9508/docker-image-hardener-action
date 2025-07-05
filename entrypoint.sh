@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+SCRIPT_DIR="${GITHUB_ACTION_PATH:-.}"
+
 mkdir -p .artifact_scan
 echo "::group::🔍 Starting Docker Image Hardener..."
 
@@ -25,7 +27,7 @@ if [[ -n "$DOCKERFILES" ]]; then
   IFS=',' read -ra FILES <<< "$DOCKERFILES"
   for FILE in "${FILES[@]}"; do
     echo "::group::🔎 Analyzing Dockerfile: $FILE"
-    python3 /app/cli/main.py "$FILE" "${ARGS[@]}"
+    python3 "$SCRIPT_DIR/cli/main.py" "$FILE" "${ARGS[@]}"
     echo "::endgroup::"
   done
 fi
@@ -45,6 +47,6 @@ echo "::endgroup::"
 # PR comment (optional)
 if [[ "$INPUT_SUMMARY" == "true" && "$GITHUB_EVENT_NAME" == "pull_request" ]]; then
   echo "::group::📣 Posting PR comment..."
-  python3 /app/cli/post_pr_comment.py
+  python3 "$SCRIPT_DIR/cli/post_pr_comment.py"
   echo "::endgroup::"
 fi
