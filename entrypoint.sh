@@ -3,7 +3,7 @@ set -e
 
 SCRIPT_DIR="${GITHUB_ACTION_PATH:-.}"
 
-mkdir -p .artifact_scan
+mkdir -p artifact_scan
 echo "::group::🔍 Starting Docker Image Hardener..."
 
 ARGS=()
