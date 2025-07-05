@@ -68,6 +68,22 @@ runs:
         curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
       shell: bash
 
+    - name: 🧪 Export Inputs as Environment Variables
+      run: |
+        echo "INPUT_DOCKERFILE=${{ inputs.dockerfile }}" >> $GITHUB_ENV
+        echo "INPUT_IMAGE=${{ inputs.image }}" >> $GITHUB_ENV
+        echo "INPUT_SCAN=${{ inputs.scan }}" >> $GITHUB_ENV
+        echo "INPUT_REWRITE=${{ inputs.rewrite }}" >> $GITHUB_ENV
+        echo "INPUT_FAIL_ON_CRITICAL=${{ inputs.fail-on-critical }}" >> $GITHUB_ENV
+        echo "INPUT_SEVERITY=${{ inputs.severity }}" >> $GITHUB_ENV
+        echo "INPUT_SUMMARY=${{ inputs.summary }}" >> $GITHUB_ENV
+        echo "INPUT_SAVE_JSON=${{ inputs.save-json }}" >> $GITHUB_ENV
+        echo "INPUT_SBOM=${{ inputs.sbom }}" >> $GITHUB_ENV
+        echo "INPUT_SARIF=${{ inputs.sarif }}" >> $GITHUB_ENV
+        echo "INPUT_SCORECARD=${{ inputs.scorecard }}" >> $GITHUB_ENV
+        echo "INPUT_OUTPUT_DIR=${{ inputs.output-dir }}" >> $GITHUB_ENV
+      shell: bash
+
     - name: 🚀 Run Docker Hardener
       run: |
         bash ${{ github.action_path }}/entrypoint.sh
