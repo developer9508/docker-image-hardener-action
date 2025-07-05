@@ -88,3 +88,12 @@ runs:
       run: |
         bash ${{ github.action_path }}/entrypoint.sh
       shell: bash
+
+    - name: Upload Scan artifacts
+      if: always()  # Upload even if job failed
+      uses: actions/upload-artifact@v4
+      with:
+        name: scan-artifacts
+        path: |
+          .artifact_scan/
+        include_hidden_files: true
