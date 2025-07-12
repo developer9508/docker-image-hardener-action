@@ -25,11 +25,11 @@ def append_to_summary(image_name, vuln_count, status, json_file):
         vuln_count = "-"
         status = f"⚠️ Error: {e}"
 
-    # GitHub Action run artifact download page
+    # Direct artifact listing link (user must click to download)
     repo = os.environ.get("GITHUB_REPOSITORY", "")
     run_id = os.environ.get("GITHUB_RUN_ID", "")
-    artifact_url = f"https://github.com/{repo}/actions/runs/{run_id}"
-    report_link = f"[📄 Download Report]({artifact_url})"
+    artifact_link = f"https://github.com/{repo}/actions/runs/{run_id}/artifacts"
+    report_link = f"[📄 Download Report]({artifact_link})"
 
     row = f"| `{image_name}` | `{vuln_count}` | {status} | {report_link} |\n"
 
