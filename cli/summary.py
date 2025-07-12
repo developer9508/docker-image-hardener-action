@@ -25,7 +25,13 @@ def append_to_summary(image_name, vuln_count, status, json_file):
         vuln_count = "-"
         status = f"⚠️ Error: {e}"
 
-    row = f"| `{image_name}` | `{vuln_count}` | {status} | `{json_file}` |\n"
+    # GitHub Action run artifact download page
+    repo = os.environ.get("GITHUB_REPOSITORY", "")
+    run_id = os.environ.get("GITHUB_RUN_ID", "")
+    artifact_url = f"https://github.com/{repo}/actions/runs/{run_id}"
+    report_link = f"[📄 Download Report]({artifact_url})"
+
+    row = f"| `{image_name}` | `{vuln_count}` | {status} | {report_link} |\n"
 
     header = (
         "## 🛡️ Trivy Scan Summary\n\n"
