@@ -89,10 +89,11 @@ def run_image_scan(
         sbom_path = output_path / sbom_filename
         print("📦 Generating SBOM...")
         sbom_cmd = [
-            "trivy", "sbom",
+            "trivy", "image",
             "--format", "cyclonedx",
             "--scanners", "license",
-            "--output", str(sbom_path)
+            "--output", str(sbom_path),
+            image_name
         ]
         subprocess.run(sbom_cmd, check=True)
         print(f"📄 SBOM saved to: {sbom_path}")
