@@ -1,25 +1,28 @@
-# 🔐 Docker Image Hardener
+🔐 Docker Image Hardener
+Secure your Docker images by scanning and analyzing them using Trivy.
+This GitHub Action helps you harden Dockerfiles, identify vulnerabilities, generate SBOM/SARIF reports, and score your image — directly in CI/CD.
 
-Secure your Docker images by scanning and analyzing them using [Trivy](https://github.com/aquasecurity/trivy). This GitHub Action helps you harden Dockerfiles, identify vulnerabilities, generate SBOM/SARIF reports, and score your image — directly in CI/CD.
+🚀 Features
+🔍 Trivy scan for vulnerabilities
 
----
+📄 JSON vulnerability report
 
-## 🚀 Features
+🧾 SBOM generation (CycloneDX format)
 
-- 🔍 Trivy scan for vulnerabilities
-- 📄 JSON vulnerability report
-- 🧾 SBOM generation (CycloneDX format)
-- 🧪 SARIF output for GitHub Security tab
-- 📊 Scorecard grading (A/B/C/D)
-- 📝 GitHub Actions summary report
-- 📦 Upload scan artifacts
-- 💡 Supports multiple Dockerfiles/images
+🧪 SARIF output for GitHub Security tab
 
----
+📊 Scorecard grading (A/B/C/D)
 
-## 🧰 Usage
+📝 GitHub Actions summary report
 
-```yaml
+📦 Upload scan artifacts
+
+💡 Supports multiple Dockerfiles/images
+
+🧰 Usage
+yaml
+Copy
+Edit
 jobs:
   harden:
     runs-on: ubuntu-latest
@@ -37,3 +40,74 @@ jobs:
           sbom: true
           sarif: true
           scorecard: true
+⚙️ Inputs
+Name	Type	Description	Required	Default
+dockerfile	string	Comma-separated list of Dockerfile paths to scan	false	""
+image	string	Comma-separated list of image names (if already built)	false	""
+scan	boolean	Run Trivy scan on the image	false	false
+rewrite	boolean	Rewrite the Dockerfile with best practices (coming soon)	false	false
+fail-on-critical	boolean	Fail job if CRITICAL vulnerabilities are found	false	false
+severity	string	Comma-separated severities (e.g., HIGH,CRITICAL)	false	UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
+summary	boolean	Generate GitHub Summary Table	false	false
+save-json	boolean	Save scan result as JSON	false	false
+sbom	boolean	Generate SBOM in CycloneDX format	false	false
+sarif	boolean	Generate SARIF report (for GitHub Security tab)	false	false
+scorecard	boolean	Grade image security (A/B/C/D)	false	false
+output-dir	string	Directory to store scan outputs	false	artifact_scan/
+
+📂 Artifacts
+When enabled, the following files are uploaded automatically:
+
+*.json – Trivy scan results
+
+*.sbom.json – Software Bill of Materials
+
+*.sarif.json – SARIF security report
+
+📘 GitHub Summary Output
+A GitHub Actions summary is generated when summary: true is passed.
+
+pgsql
+Copy
+Edit
+## 🛡️ Trivy Scan Summary
+
+| Image                            | Vulnerabilities | Status     | Report                                  |
+|----------------------------------|------------------|------------|-----------------------------------------|
+| harden-test-image-sample:latest | 12               | ❌ Failed   | scan-artifacts/harden-test-image-sample_latest_trivy_scan_result.json |
+📌 Notes
+⚠️ Wiz integration will be added soon.
+
+🛠️ Want custom behavior, additional scanners, or enterprise support?
+Contact me directly — I'm open to custom work and collaboration.
+
+🧩 Roadmap
+✅ Multi-image scan support
+
+✅ Scorecard grading
+
+✅ SBOM and SARIF support
+
+🔜 Dockerfile rewriting with best practices
+
+🔜 Wiz CLI scan integration
+
+🔜 PR comment bot support
+
+🔜 GitHub Security tab annotation upload
+
+🙋 Support
+This action is actively maintained.
+Have an idea, question, or improvement?
+Open an issue or contact me directly.
+
+🧾 License
+MIT
+
+☕ Sponsor or Hire
+Like this action?
+Use it in production?
+Want custom DevSecOps tools built for your team?
+
+Let’s collaborate.
+Reach out via GitHub or LinkedIn
