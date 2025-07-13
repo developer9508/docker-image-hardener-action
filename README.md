@@ -125,4 +125,4 @@ Use it in production?
 Want custom DevSecOps tools built for your team?
 
 > Let’s collaborate.  
-> Reach out via GitHub or [LinkedIn](https://linkedin.com/in/YOUR-PROFILE)
+> Reach out via GitHub or [LinkedIn](https://www.linkedin.com/in/bharat-maheshwari-824bb5147)
