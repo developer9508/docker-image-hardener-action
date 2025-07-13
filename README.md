@@ -82,6 +82,7 @@ A GitHub Actions summary is generated when `summary: true` is passed.
 |---------------------------------|-----------------|------------|
 | harden-test-image-sample:latest | 12              | ❌ Failed  |
 ```
+
 ---
 
 ## 📌 Notes
@@ -118,11 +119,11 @@ Have an idea, question, or improvement?
 
 ---
 
-## ☕ Sponsor or Hire
+## 🤝 Sponsor or Collaborate
 
-Like this action?  
-Use it in production?  
+Using this action in production?  
+Need enterprise-grade security tooling or custom GitHub Actions?
 Want custom DevSecOps tools built for your team?
 
-> Let’s collaborate.  
-> Reach out via GitHub or [LinkedIn](https://www.linkedin.com/in/bharat-maheshwari-824bb5147)
+> I'm open to collaborations on open-source, DevSecOps, or CI/CD tooling.  
+> For consulting or enterprise integrations, feel free to connect on [LinkedIn](https://www.linkedin.com/in/bharat-maheshwari-824bb5147) or open an issue.
