@@ -1,8 +1,9 @@
-🔐 Docker Image Hardener
+#🔐 Docker Image Hardener
 Secure your Docker images by scanning and analyzing them using Trivy.
 This GitHub Action helps you harden Dockerfiles, identify vulnerabilities, generate SBOM/SARIF reports, and score your image — directly in CI/CD.
 
-🚀 Features
+##🚀 Features
+
 🔍 Trivy scan for vulnerabilities
 
 📄 JSON vulnerability report
